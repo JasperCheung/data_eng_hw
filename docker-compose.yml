@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+  db:
+    image: hinge
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    build: ./docker/postgres
+    ports:
+      - "5432:5432"

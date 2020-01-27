@@ -18,7 +18,7 @@ def load_marketing(file_path):
     )
     cur = conn.cursor()
     f = open(file_path)
-    query = "COPY Marketing FROM STDIN WITH CSV HEADER DELIMITER as ','"
+    query = "COPY Marketing FROM STDIN WITH DELIMITER as ','"
     cur.copy_expert(query, f)
     f.close()
     conn.commit()
@@ -33,7 +33,7 @@ def load_users(file_path):
     )
     cur = conn.cursor()
     f = open(file_path)
-    query = "COPY Users FROM STDIN WITH CSV HEADER DELIMITER as ','"
+    query = "COPY Users FROM STDIN WITH DELIMITER as ','"
     cur.copy_expert(query, f)
     f.close()
     conn.commit()

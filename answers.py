@@ -1,6 +1,8 @@
 import psycopg2
 
 def count_users():
+    """Count the number of distinct users.
+    """
     conn = psycopg2.connect(
         user="postgres",
         password="password",
@@ -15,6 +17,8 @@ def count_users():
     conn.close()
 
 def count_providers():
+    """Count the number of distinct providers.
+    """
     conn = psycopg2.connect(
         user="postgres",
         password="password",
@@ -29,7 +33,27 @@ def count_providers():
     cur.close()
     conn.close()
 
+def count_property():
+    """Grab the property that occurs the most.
+    """
+    conn = psycopg2.connect(
+        user="postgres",
+        password="password",
+        host="localhost",
+    )
+    cur = conn.cursor()
+    query = "SELECT property, count(property) FROM Users group by property order by count(property) desc"
+    cur.execute(query)
+    property_name = cur.fetchone()[0]
+    count = cur.fetchone()[1]
+    print("iii. The property that changes the most frequently is {}, which changes {} times.".format(property_name,count))
+    conn.commit()
+    cur.close()
+    conn.close()
+
 def july_3_snap():
+    """Count the number of distinct users that have the phone id found when provider is Snapchat and the date is july 3.
+    """
     conn = psycopg2.connect(
         user="postgres",
         password="password",
@@ -47,6 +71,8 @@ def july_3_snap():
 
 
 def moderate_ads():
+    """Count the ads that were shown the most to users idenfied as moderates.
+    """
     conn = psycopg2.connect(
         user="postgres",
         password="password",
@@ -72,5 +98,6 @@ ORDER BY count(Marketing.event_id) DESC
 
 count_users() #i
 count_providers() #ii
+count_property() #iii
 july_3_snap() #iv
 moderate_ads() #v

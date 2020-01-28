@@ -3,6 +3,8 @@ import csv
 
 
 def load_data():
+    """Refresh the Table and then load users and marketing csvs into the respective tables
+    """
     drop_tables()
     MARKETING_URL = './dataset/marketing_2019-07-0{}.csv'
     USERS_URL = './dataset/user_2019-07-0{}.csv'
@@ -11,6 +13,8 @@ def load_data():
         load_users(clean_file(USERS_URL.format(day)))
 
 def load_marketing(file_path):
+    """given a file path load the data into the Marketing table
+    """
     conn = psycopg2.connect(
         user="postgres",
         password="password",
@@ -26,6 +30,8 @@ def load_marketing(file_path):
     conn.close()
 
 def load_users(file_path):
+    """given a file path load the data into the Users table
+    """
     conn = psycopg2.connect(
         user="postgres",
         password="password",
@@ -58,6 +64,9 @@ def drop_tables():
     conn.close()
 
 def clean_file(file_path):
+    """read csv file and clean the file: remove 0x00, \0, and extra newlines
+    output the new file in a directory called clean.
+    """
     cleaned_file =  file_path.replace("dataset","clean")
     f  = open(file_path)
     reader = csv.reader(row.replace('0x00', '').replace('\0',"") for row in f)

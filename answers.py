@@ -95,9 +95,45 @@ ORDER BY count(Marketing.event_id) DESC
     cur.close()
     conn.close()
 
+def get_best_ads():
+    """Calculate the best ads by taking the users who used the app after the a ad was shown and then dividing that by the total time the ad was running to get a an avg.
+    """
+    conn = psycopg2.connect(
+        user="postgres",
+        password="password",
+        host="localhost",
+    )
+    cur = conn.cursor()
+    query='''
+    with sum_length as(select ad_id, sum(length) from marketing group by ad_id),
+ad_counts as (select marketing.ad_id,count(distinct(users.user_id))
+FROM USERS
+join marketing on marketing.phone_id = users.phone_id
+join initial on initial.user_id = users.user_id
+where marketing.event_ts < initial.event_ts
+group by marketing.ad_id)
+
+select ad_counts.ad_id, CAST(ad_counts.count as float)/sum_length.sum as avg from ad_counts
+join sum_length on sum_length.ad_id = ad_counts.ad_id
+order by avg desc LIMIT 5
+    '''
+    cur.execute(query)
+    results = cur.fetchall()
+    conn.commit()
+    cur.close()
+    conn.close()
+    print("the best ads are:")
+    for ad in results:
+        print("ad #{} with {} avg signups per unit length".format(ad[0],ad[1]))
+
+
+
+
+
 
 count_users() #i
 count_providers() #ii
 count_property() #iii
 july_3_snap() #iv
 moderate_ads() #v
+get_best_ads()

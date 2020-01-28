@@ -11,6 +11,7 @@ def load_data():
     for day in range(1,8):
         load_marketing(clean_file(MARKETING_URL.format(day)))
         load_users(clean_file(USERS_URL.format(day)))
+    load_inital_table()
 
 def load_marketing(file_path):
     """given a file path load the data into the Marketing table
@@ -88,6 +89,24 @@ def clean_file(file_path):
     f.close()
     output.close()
     return cleaned_file
+
+def load_inital_table():
+    """Fill the table initial with user_ids and their first ts
+    """
+    conn = psycopg2.connect(
+        user="postgres",
+        password="password",
+        host="localhost",
+    )
+    cur = conn.cursor()
+    query = '''INSERT INTO initial
+    SELECT user_id, min(event_ts) from Users
+    Group By user_id
+    '''
+    cur.execute(query)
+    conn.commit()
+    cur.close()
+    conn.close()
 
 
 load_data()

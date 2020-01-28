@@ -18,3 +18,9 @@ CREATE TABLE IF NOT EXISTS Users (
     event_ts timestamp,
     PRIMARY KEY(event_id)
 );
+
+CREATE TABLE IF NOT EXISTS initial(
+       user_id varchar(255),
+       event_ts timestamp,
+       PRIMARY KEY(user_id)
+);

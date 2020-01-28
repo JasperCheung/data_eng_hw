@@ -122,7 +122,7 @@ order by avg desc LIMIT 5
     conn.commit()
     cur.close()
     conn.close()
-    print("the best ads are:")
+    print("vi. the best ads are:")
     for ad in results:
         print("ad #{} with {} avg signups per unit length".format(ad[0],ad[1]))
 

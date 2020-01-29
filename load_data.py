@@ -75,6 +75,7 @@ def clean_file(file_path):
     output = open(cleaned_file, "w")
     writer = csv.writer(output)
     partial = []
+    # how i get around random newlines, check the number of records in a row and if its less than the columns, appends the two together and then write to new file.
     for row in reader:
         if(row):
             if(partial):
